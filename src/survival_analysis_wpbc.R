@@ -57,7 +57,11 @@ ggsurvplot(
   legend.title = "Tumor Size",
   title = "Survival by Tumor Size (Median Split)"
 )
-
+ggsave(
+  filename = "results/figures/km_survival_plot.png",
+  width = 8,
+  height = 6
+)
 #  Log-Rank Test
 # Statistical test to see if curves are significantly different
 surv_diff <- survdiff(surv_object ~ Size_Group, data = data)
@@ -77,3 +81,10 @@ ggcoxzph(test_ph) # If lines are relatively flat, the model is valid
 #  Adjusted Survival Curves
 # Shows predicted survival for an average patient in each group
 ggadjustedcurves(cox_model, data = data, variable = "Size_Group")
+
+cox_summary <- summary(cox_model)
+
+write.csv(
+  as.data.frame(cox_summary$coefficients),
+  "results/tables/cox_model_results.csv"
+)S
